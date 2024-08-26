@@ -4,7 +4,7 @@ import { UserProps, SortOptions, Priority, SortType, DateFilterType } from '../t
 import { DateTime } from 'luxon';
 
 type UserTableProps = {
-  selectedFilter: 'Name' | 'Priority' | 'Date' | ''; 
+  selectedFilter: 'Name' | 'Priority' | 'Due Date' | ''; 
   searchTerm: string;
   selectedSort: SortOptions | '';
   sortOrder: 'asc' | 'desc';
@@ -15,7 +15,7 @@ type UserTableProps = {
 
 const filterUsers = (
   users: UserProps[],
-  filter: 'Name' | 'Priority' | 'Date' | '',
+  filter: 'Name' | 'Priority' | 'Due Date' | '',
   term: string,
   priorities: Priority[],
   dateFilterType: DateFilterType
@@ -35,7 +35,7 @@ const filterUsers = (
           ? priorities.includes(user.priority as Priority)
           : true;
 
-      case 'Date': {
+      case 'Due Date': {
         if (!term) return true; 
 
         const dateTerm = DateTime.fromISO(term, { zone: 'utc' }).startOf('day');

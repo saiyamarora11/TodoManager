@@ -33,6 +33,9 @@ const FilterInput: React.FC<FilterInputProps> = ({
     onFilterChange(FilterOptions.Date);
   };
 
+  const priorityArray: Priority[] = [Priority.Low, Priority.Medium, Priority.High];
+
+
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     onSearchChange(event.target.value);
   };
@@ -113,28 +116,28 @@ const FilterInput: React.FC<FilterInputProps> = ({
         <div className="dropdown mt-4">
           <label
             tabIndex={0}
-            className="btn m-1"
+            className="btn mb-2"
             onClick={toggleDropdown}
           >
             {selectedPriorities.length > 0 ? selectedPriorities.join(', ') : 'Select Priority'}
           </label>
           {dropdownOpen && (
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow z-[100] bg-base-100 rounded-box w-52 ">
-              {Object.values(Priority).map(priority => (
-                <li key={priority}>
-                  <label className="cursor-pointer label" onClick={(e) => e.stopPropagation()}>
-                    <input
-                      type="checkbox"
-                      value={priority}
-                      checked={selectedPriorities.includes(priority)}
-                      onChange={handlePriorityChange}
-                      className="checkbox"
-                    />
-                    <span className="label-text">{priority}</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
+            <ul tabIndex={0} className="dropdown-container">
+            {priorityArray.map(priority => (
+              <li key={priority}>
+                <label className="cursor-pointer label" onClick={(e) => e.stopPropagation()}>
+                  <input
+                    type="checkbox"
+                    value={priority}
+                    checked={selectedPriorities.includes(priority)}
+                    onChange={handlePriorityChange}
+                    className="checkbox"
+                  />
+                  <span className="label-text">{priority}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
           )}
         </div>
       )}

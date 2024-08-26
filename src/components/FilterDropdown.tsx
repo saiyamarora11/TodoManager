@@ -12,7 +12,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({ onSelect }) => {
 
   return (
     <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="btn h-8 m-1">Filter</div>
+      <div tabIndex={0} role="button" className="btn mb-2">Filter</div>
       <ul onClick={handleClick} tabIndex={0} className="dropdown-container">
         {filterOptions.map((filter) => (
           <li key={filter}>

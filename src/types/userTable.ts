@@ -28,7 +28,7 @@ export enum TaskType {
 export enum FilterOptions {
     Name = 'Name',
     Priority = 'Priority',
-    Date = 'Date',
+    Date = 'Due Date',
   }
   export enum SortOptions {
     Name = 'Name',
@@ -38,7 +38,7 @@ export enum FilterOptions {
 
   export type OrderBy = 'asc' | 'desc';
 
-  export type SortType = 'name' | 'priority';
+  export type SortType = 'name' | 'priority' | 'dueDate';
 
   export enum DateFilterType {
     Is = 'is',

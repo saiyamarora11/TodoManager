@@ -27,6 +27,20 @@ const App: React.FC = () => {
   const [selectedPriorities, setSelectedPriorities] = useState<Priority[]>(initialState.selectedPriorities); 
   const [dateFilterType, setDateFilterType] = useState<DateFilterType>(initialState.dateFilterType); 
 
+  // Helper function to map SortOptions to SortType
+  const mapSortOptionsToSortType = (sort: SortOptions): SortType => {
+    switch (sort) {
+      case SortOptions.Name:
+        return 'name';
+      case SortOptions.Priority:
+        return 'priority';
+      case SortOptions.Date:
+        return 'date';
+      default:
+        return 'name'; // Default case, can be adjusted based on logic
+    }
+  };
+
   const applyFilter = (filter: FilterOptions) => {
     setSelectedFilter(filter); 
     setSearchTerm(''); 
@@ -35,6 +49,8 @@ const App: React.FC = () => {
 
   const applySort = (sort: SortOptions) => {
     setSelectedSort(sort);
+    // Update sortType based on selectedSort using the mapping function
+    setSortType(mapSortOptionsToSortType(sort));
   };
 
   const updateSortOrder = (order: 'asc' | 'desc') => {
