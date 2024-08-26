@@ -4,7 +4,7 @@
 
 
 .dropdown-container{
-    @apply dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow;
+    @apply dropdown-content menu p-2 shadow z-[100] bg-base-100 rounded-box w-52 ;
 }
 
 .select-container{

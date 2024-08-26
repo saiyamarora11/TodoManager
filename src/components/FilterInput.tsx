@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'; 
+import 'react-datepicker/dist/react-datepicker.css';
 import { DateFilterType, FilterOptions, Priority } from '../types/userTable';
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
@@ -10,7 +10,7 @@ type FilterInputProps = {
   onSearchChange: (term: string) => void;
   selectedPriorities: Priority[];
   onPrioritiesChange: (priorities: Priority[]) => void;
-  onFilterChange: (filter: FilterOptions) => void; 
+  onFilterChange: (filter: FilterOptions) => void;
   dateFilterType: DateFilterType;
   onDateFilterTypeChange: (filterType: DateFilterType) => void;
 };
@@ -25,6 +25,8 @@ const FilterInput: React.FC<FilterInputProps> = ({
   dateFilterType,
   onDateFilterTypeChange
 }) => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
   const handleDateFilterTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newFilterType = event.target.value as DateFilterType;
     onDateFilterTypeChange(newFilterType);
@@ -35,25 +37,31 @@ const FilterInput: React.FC<FilterInputProps> = ({
     onSearchChange(event.target.value);
   };
 
-  const handlePriorityChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value as Priority;
-    const updatedPriorities = event.target.checked
-      ? [...selectedPriorities, value]
-      : selectedPriorities.filter(priority => priority !== value);
+  const handlePriorityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    let updatedPriorities = [...selectedPriorities];
+    if (checked) {
+      updatedPriorities.push(value as Priority);
+    } else {
+      updatedPriorities = updatedPriorities.filter((priority) => priority !== value);
+    }
     onPrioritiesChange(updatedPriorities);
-    onFilterChange(FilterOptions.Priority); 
   };
 
   const handleDateChange = (date: Date | null) => {
     if (date) {
-      onSearchChange(date.toISOString().split('T')[0]); 
+      onSearchChange(date.toISOString().split('T')[0]);
     } else {
       onSearchChange('');
     }
   };
 
   const handleClearDate = () => {
-    onSearchChange(''); 
+    onSearchChange('');
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   return (
@@ -75,7 +83,7 @@ const FilterInput: React.FC<FilterInputProps> = ({
             <DatePicker
               selected={searchTerm ? new Date(searchTerm) : null}
               onChange={handleDateChange}
-              dateFormat="yyyy-MM-dd" 
+              dateFormat="yyyy-MM-dd"
               className='rounded-md p-2'
             />
             {searchTerm && (
@@ -102,22 +110,32 @@ const FilterInput: React.FC<FilterInputProps> = ({
       )}
 
       {selectedFilter === FilterOptions.Priority && (
-        <div className='mt-4'>
-          <label className='block mb-2'>Select Priorities:</label>
-          <div className='flex flex-col'>
-            {Object.values(Priority).map(priority => (
-              <label key={priority} className='flex items-center'>
-                <input
-                  type="checkbox"
-                  value={priority}
-                  checked={selectedPriorities.includes(priority)}
-                  onChange={handlePriorityChange}
-                  className='mr-2'
-                />
-                {priority}
-              </label>
-            ))}
-          </div>
+        <div className="dropdown mt-4">
+          <label
+            tabIndex={0}
+            className="btn m-1"
+            onClick={toggleDropdown}
+          >
+            {selectedPriorities.length > 0 ? selectedPriorities.join(', ') : 'Select Priority'}
+          </label>
+          {dropdownOpen && (
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow z-[100] bg-base-100 rounded-box w-52 ">
+              {Object.values(Priority).map(priority => (
+                <li key={priority}>
+                  <label className="cursor-pointer label" onClick={(e) => e.stopPropagation()}>
+                    <input
+                      type="checkbox"
+                      value={priority}
+                      checked={selectedPriorities.includes(priority)}
+                      onChange={handlePriorityChange}
+                      className="checkbox"
+                    />
+                    <span className="label-text">{priority}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       )}
     </div>
