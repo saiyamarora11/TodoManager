@@ -1,11 +1,12 @@
 import React from 'react';
-import { OrderBy, SortType } from '../types/userTable'; 
+import { OrderBy, SortOptions, SortType } from '../types/userTable'; 
 
 type SortOrderDropdownProps = {
   sortOrder: OrderBy;
-  sortType: SortType; 
+  sortType: SortType;
   onOrderChange: (order: OrderBy) => void;
   onTypeChange: (type: SortType) => void;
+  onSortChange: (sort: SortOptions) => void; 
 };
 
 const SortOrderDropdown: React.FC<SortOrderDropdownProps> = ({
@@ -13,13 +14,27 @@ const SortOrderDropdown: React.FC<SortOrderDropdownProps> = ({
   sortType,
   onOrderChange,
   onTypeChange,
+  onSortChange
 }) => {
   const handleOrderChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onOrderChange(event.target.value as OrderBy);
   };
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onTypeChange(event.target.value as SortType);
+    const newSortType = event.target.value as SortType;
+    onTypeChange(newSortType);
+  
+    const newSortOption = (() => {
+      switch (newSortType) {
+        case 'name':
+          return SortOptions.Name;
+        case 'priority':
+          return SortOptions.Priority;
+        case 'dueDate':
+          return SortOptions.Date;
+      }
+    })();
+    if (newSortOption) onSortChange(newSortOption);
   };
 
   return (
@@ -34,7 +49,7 @@ const SortOrderDropdown: React.FC<SortOrderDropdownProps> = ({
           >
             <option value="name">By Name</option>
             <option value="priority">By Priority</option>
-            <option value="date">By Date</option>
+            <option value="dueDate">By Date</option>
           </select>
           <select
             value={sortOrder}

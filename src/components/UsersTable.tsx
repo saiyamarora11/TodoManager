@@ -107,13 +107,10 @@ const UsersTable = ({
   selectedPriorities,
   dateFilterType 
 }: UserTableProps) => {
-  // Memoize filtered users
   const filteredUsers = useMemo(
     () => filterUsers(demoUsers, selectedFilter, searchTerm, selectedPriorities, dateFilterType),
     [selectedFilter, searchTerm, selectedPriorities, dateFilterType]
   );
-
-  // Memoize sorted users
   const sortedUsers = useMemo(
     () => (selectedSort ? sortUsers(filteredUsers, selectedSort, sortOrder) : filteredUsers),
     [filteredUsers, selectedSort, sortOrder]

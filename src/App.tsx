@@ -57,7 +57,21 @@ const App: React.FC = () => {
 
   const updateSortType = (type: SortType) => {
     setSortType(type);
+    const newSortOption = (() => {
+      switch (type) {
+        case 'name':
+          return SortOptions.Name;
+        case 'priority':
+          return SortOptions.Priority;
+        case 'dueDate':
+          return SortOptions.Date;
+        default:
+          return SortOptions.Name; 
+      }
+    })();
+    setSelectedSort(newSortOption);
   };
+  
 
   const updateSearchTerm = (term: string) => {
     setSearchTerm(term);
@@ -109,11 +123,12 @@ const App: React.FC = () => {
         </div>
         {selectedSort && (
           <SortOrderDropdown 
-            sortOrder={sortOrder} 
-            sortType={sortType} 
-            onOrderChange={updateSortOrder} 
-            onTypeChange={updateSortType} 
-          />
+          sortOrder={sortOrder} 
+          sortType={sortType} 
+          onOrderChange={updateSortOrder} 
+          onTypeChange={updateSortType}
+          onSortChange={applySort} 
+        />
         )}
         {selectedFilter && (
           <FilterInput
